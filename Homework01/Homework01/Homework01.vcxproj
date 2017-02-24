@@ -110,7 +110,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="aes.c" />
+    <ClCompile Include="aesni.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="padlock.c" />
+    <ClCompile Include="platform.c" />
+    <ClCompile Include="sha512.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mbedtls\aes.h" />
+    <ClInclude Include="mbedtls\aesni.h" />
+    <ClInclude Include="mbedtls\check_config.h" />
+    <ClInclude Include="mbedtls\config.h" />
+    <ClInclude Include="mbedtls\padlock.h" />
+    <ClInclude Include="mbedtls\platform.h" />
+    <ClInclude Include="mbedtls\platform_time.h" />
+    <ClInclude Include="mbedtls\sha512.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
