@@ -5,14 +5,14 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libExcerpt", "libExcerpt\libExcerpt.vcxitems", "{45D41ACC-2C3C-43D2-BC10-02AA73FFC7C7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Encoder", "Encoder\Encoder.vcxproj", "{5E87CA68-71B0-480F-B250-6BAB82ABF25D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Encryption", "Encryption\Encryption.vcxproj", "{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Decoder", "Decoder\Decoder.vcxproj", "{72B9F2BA-F616-4502-B162-638493D46F22}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Decryption", "Decryption\Decryption.vcxproj", "{E46B98A2-B2A6-415C-B952-0C0B19A75C97}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		libExcerpt\libExcerpt.vcxitems*{72b9f2ba-f616-4502-b162-638493d46f22}*SharedItemsImports = 4
-		libExcerpt\libExcerpt.vcxitems*{5e87ca68-71b0-480f-b250-6bab82abf25d}*SharedItemsImports = 4
+		libExcerpt\libExcerpt.vcxitems*{e8092c22-a162-42bf-aa21-90a8e2ebb6c0}*SharedItemsImports = 4
+		libExcerpt\libExcerpt.vcxitems*{e46b98a2-b2a6-415c-b952-0c0b19a75c97}*SharedItemsImports = 4
 		libExcerpt\libExcerpt.vcxitems*{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,22 +22,22 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Debug|x64.ActiveCfg = Debug|x64
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Debug|x64.Build.0 = Debug|x64
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Debug|x86.ActiveCfg = Debug|Win32
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Debug|x86.Build.0 = Debug|Win32
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Release|x64.ActiveCfg = Release|x64
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Release|x64.Build.0 = Release|x64
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Release|x86.ActiveCfg = Release|Win32
-		{5E87CA68-71B0-480F-B250-6BAB82ABF25D}.Release|x86.Build.0 = Release|Win32
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Debug|x64.ActiveCfg = Debug|x64
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Debug|x64.Build.0 = Debug|x64
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Debug|x86.ActiveCfg = Debug|Win32
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Debug|x86.Build.0 = Debug|Win32
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Release|x64.ActiveCfg = Release|x64
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Release|x64.Build.0 = Release|x64
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Release|x86.ActiveCfg = Release|Win32
-		{72B9F2BA-F616-4502-B162-638493D46F22}.Release|x86.Build.0 = Release|Win32
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Debug|x64.ActiveCfg = Debug|x64
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Debug|x64.Build.0 = Debug|x64
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Debug|x86.ActiveCfg = Debug|Win32
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Debug|x86.Build.0 = Debug|Win32
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Release|x64.ActiveCfg = Release|x64
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Release|x64.Build.0 = Release|x64
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Release|x86.ActiveCfg = Release|Win32
+		{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}.Release|x86.Build.0 = Release|Win32
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Debug|x64.ActiveCfg = Debug|x64
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Debug|x64.Build.0 = Debug|x64
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Debug|x86.ActiveCfg = Debug|Win32
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Debug|x86.Build.0 = Debug|Win32
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Release|x64.ActiveCfg = Release|x64
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Release|x64.Build.0 = Release|x64
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Release|x86.ActiveCfg = Release|Win32
+		{E46B98A2-B2A6-415C-B952-0C0B19A75C97}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

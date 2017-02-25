@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{72B9F2BA-F616-4502-B162-638493D46F22}</ProjectGuid>
-    <RootNamespace>Decoder</RootNamespace>
+    <ProjectGuid>{E46B98A2-B2A6-415C-B952-0C0B19A75C97}</ProjectGuid>
+    <RootNamespace>Decryption</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -111,7 +111,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\libExcerpt\timing.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

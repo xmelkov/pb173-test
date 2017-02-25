@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5E87CA68-71B0-480F-B250-6BAB82ABF25D}</ProjectGuid>
-    <RootNamespace>Encoder</RootNamespace>
+    <ProjectGuid>{E8092C22-A162-42BF-AA21-90A8E2EBB6C0}</ProjectGuid>
+    <RootNamespace>Encryption</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
