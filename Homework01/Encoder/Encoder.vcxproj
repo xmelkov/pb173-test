@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8A9439F8-E11A-4D54-AB72-3184F7F3B5A6}</ProjectGuid>
-    <RootNamespace>Homework01</RootNamespace>
+    <ProjectGuid>{5E87CA68-71B0-480F-B250-6BAB82ABF25D}</ProjectGuid>
+    <RootNamespace>Encoder</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -54,6 +54,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
+    <Import Project="..\libExcerpt\libExcerpt.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -110,22 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="aes.c" />
-    <ClCompile Include="aesni.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="padlock.c" />
-    <ClCompile Include="platform.c" />
-    <ClCompile Include="sha512.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="mbedtls\aes.h" />
-    <ClInclude Include="mbedtls\aesni.h" />
-    <ClInclude Include="mbedtls\check_config.h" />
-    <ClInclude Include="mbedtls\config.h" />
-    <ClInclude Include="mbedtls\padlock.h" />
-    <ClInclude Include="mbedtls\platform.h" />
-    <ClInclude Include="mbedtls\platform_time.h" />
-    <ClInclude Include="mbedtls\sha512.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

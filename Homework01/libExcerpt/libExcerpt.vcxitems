@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)aes.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)aesni.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ctr_drbg.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)entropy.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)entropy_poll.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)padlock.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)platform.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)sha512.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)timing.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\aes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\aesni.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\check_config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\ctr_drbg.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\entropy.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\entropy_poll.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\padlock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\platform_time.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\sha512.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)mbedtls\timing.h" />
+  </ItemGroup>
+</Project>
