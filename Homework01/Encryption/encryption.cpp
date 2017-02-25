@@ -5,7 +5,7 @@
 #include "..\libExcerpt\mbedtls\entropy.h"
 #include "..\libExcerpt\mbedtls\ctr_drbg.h"
 
-AESKey generateRandomKey()
+AESKey generateRandomAESKey()
 {
 	AESKey key;
 
@@ -35,5 +35,20 @@ AESKey generateRandomKey()
 	}
 	mbedtls_entropy_free(&entropyContext);
 	mbedtls_ctr_drbg_free(&ctrDbgContext);
-	return key;		//	NVRO applied
+	return key;								/*	Return value optimization should be applied here 
+												(supposing usage of c++11 or newer)*/
+}
+
+unsigned int alignSHA512Block(SHA512Block & sha512block, unsigned int blockLength)
+{
+	const unsigned char alignmentValue = AES_KEY_LENGTH - (blockLength % 16);
+
+	const unsigned int alignedLength = ((blockLength / AES_KEY_LENGTH) + 1) * AES_KEY_LENGTH;
+
+	for (; blockLength != alignedLength; ++blockLength)
+	{
+		sha512block[blockLength] = alignmentValue;
+	}
+
+	return alignedLength;
 }
