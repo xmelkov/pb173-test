@@ -1,3 +1,9 @@
+/**
+ * @file aesTypes.h
+ * @author xmelkov
+ */
+
+
 #ifndef AES_TYPES_GUARD
 #define AES_TYPES_GUARD
 

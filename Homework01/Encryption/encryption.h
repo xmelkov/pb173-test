@@ -6,10 +6,13 @@
 #ifndef ENCRYPTION_GUARD
 #define ENCRYPTION_GUARD
 
+//	Required for std::string type
 #include <string>
 
+//	Required for IO encrypting operations
 #include "..\commonFiles\aesFileIO.h"
 
+//	Required for key generation
 #include "..\libExcerpt\mbedtls\ctr_drbg.h"
  
 /**

@@ -1,24 +1,19 @@
+/**
+ * @file aesFileIO.cpp
+ * @author xmelkov
+ */
 #include ".\aesFileIO.h"
 
-//	Required for std::find
-#include <algorithm>
-
-//	Required for setw/setfill
+//	Required for setw/setfill + input flags
 #include <iomanip>
-
-//	Required for input flags
-#include <ios>
 
 //	Required for console output
 #include <iostream>
 
-//	Required for std::ostream_iterator
-#include <iterator>
-
 //	Required for file input
 #include <fstream>
 
-//	Required for exception handling in case of bad key generation
+//	Required for exception handling
 #include <stdexcept>
 
 
@@ -78,7 +73,7 @@ void aesOutput(
 )
 {
 	std::string extension;
-	switch (type)
+	switch (type)				//	Extension pick
 	{
 	case OutputMode::OUTPUT_ENCRYPTED:
 		extension = std::string(ENC_FILE_EXTENSION);
@@ -96,25 +91,27 @@ void aesOutput(
 		throw std::invalid_argument("Output mode contains invalid value");
 	}
 
-	modifyFileExtension(outputPath, extension);
+	modifyFileExtension(outputPath, extension);		//	Formats output filepath
 	std::ofstream outputFile;
 	if (type == OutputMode::OUTPUT_DECRYPTED || type == OutputMode::OUTPUT_ENCRYPTED)
 	{
-		outputFile.open(outputPath, std::ios::binary | std::ios::out);
+		outputFile.open(outputPath, std::ios::binary | std::ios::out | std::ios::trunc);
+		if (!outputFile.is_open())
+		{
+			throw std::domain_error("Unable to perform output operation-failed to open file");
+		}
 		std::copy(first, last, std::ostream_iterator<unsigned char>(outputFile));
 	}
 	else
 	{
-		outputFile.open(outputPath, std::ios::binary);
+		outputFile.open(outputPath, std::ios::out | std::ios::trunc);
+		if (!outputFile.is_open())
+		{
+			throw std::domain_error("Unable to perform output operation-failed to open file");
+		}
 		while (first != last)
 		{
 			std::cout << std::hex << std::setfill('0') << std::setw(2) << *first++;
 		}
 	}
-
-	if (!outputFile.is_open())
-	{
-		throw std::domain_error("Unable to perform output operation-failed to open file");
-	}
-
 }
