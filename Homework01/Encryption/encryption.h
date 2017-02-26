@@ -25,6 +25,30 @@
  */
 #define PERSONALIZATION_STRING "random string (passphrase) used for generating AES key"
 
+/**
+ * @def ENC_FILE_EXTENSION
+ * Specifies file extension for encryption output
+ */
+#define ENC_FILE_EXTENSION ".crypt"
+
+ /**
+  * @def DEC_FILE_EXTENSION
+  * Specifies file extension for decryption output
+  */
+#define DEC_FILE_EXTENSION ".txt"
+
+ /**
+  * @def KEY_FILE_EXTENSION
+  * Specifies file extension for key output
+  */
+#define KEY_FILE_EXTENSION ".key"
+ 
+ /**
+  * @def SIG_FILE_EXTENSION
+  * Specifies file extension for hash output
+  */
+#define SIG_FILE_EXTENSION ".sig"
+
 //	mbedTLS includes
 #include "..\libExcerpt\mbedtls\ctr_drbg.h"
 

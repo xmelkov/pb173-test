@@ -3,6 +3,9 @@
 //	Required for std::find
 #include <algorithm>
 
+//	Required for setw/setfill
+#include <iomanip>
+
 //	Required for input flags
 #include <ios>
 
@@ -20,6 +23,15 @@
 
 //	Required for AES encryption
 #include "..\libExcerpt\mbedtls\aes.h"
+
+
+enum class OutputMode
+{
+	OUTPUT_ENCRYPTED,
+	OUTPUT_DECRYPTED,
+	OUTPUT_KEY,
+	OUTPUT_SIGNATURE
+};
 
 /**
 * @brief Fills single block with value representing, how many padded bytes are needed (PKCS#7 padding)
@@ -46,10 +58,7 @@ static int aesInput(std::ifstream & inputFile, AESData & aesData);
  */
 static void modifyFileExtension(std::string & filePath, const std::string & extension);
 
-/**
- * 
- */
-static void aesOutput(std::ofstream & output, const AESData & aesEncrypted);
+static void aesOutput(std::string & outputPath, OutputMode type);
 
 static void fillAESBlock(AESData & block, const AESData::size_type offset)
 {
@@ -59,7 +68,7 @@ static void fillAESBlock(AESData & block, const AESData::size_type offset)
 			position < length; ++position
 		)
 	{
-		block[position] = offset;
+		block[position] = static_cast<unsigned char>(offset);
 	}
 }
 
@@ -102,6 +111,55 @@ static void modifyFileExtension(std::string & filePath, const std::string & exte
 	}
 
 	filePath += extension;
+}
+
+static void aesOutput(
+	std::string & outputPath, 
+	OutputMode type, 
+	const unsigned char * first, 
+	const unsigned char * last
+)
+{
+	std::string extension;
+	switch (type)
+	{
+	case OutputMode::OUTPUT_ENCRYPTED:
+		extension = std::string(ENC_FILE_EXTENSION);
+		break;
+	case OutputMode::OUTPUT_DECRYPTED:
+		extension = std::string(DEC_FILE_EXTENSION);
+		break;
+	case OutputMode::OUTPUT_KEY:
+		extension = std::string(KEY_FILE_EXTENSION);
+		break;
+	case OutputMode::OUTPUT_SIGNATURE:
+		extension = std::string(SIG_FILE_EXTENSION);
+		break;
+	default:
+		throw std::invalid_argument("Output mode contains invalid value");
+	}
+
+	modifyFileExtension(outputPath, extension);
+	std::ofstream outputFile;
+	if (type == OutputMode::OUTPUT_DECRYPTED || type == OutputMode::OUTPUT_ENCRYPTED)
+	{
+		outputFile.open(outputPath, std::ios::binary | std::ios::out);
+		std::copy(first, last, std::ostream_iterator<unsigned char>(outputFile));
+	}
+	else
+	{
+		outputFile.open(outputPath, std::ios::binary);
+		while (first != last)
+		{
+			std::cout << std::hex << std::setfill('0') << std::setw(2) << *first++;
+		}
+	}
+
+	if (!outputFile.is_open())
+	{
+		throw std::domain_error("Unable to perform output operation-failed to open file");
+	}
+	
 }
 
 mbedtls_ctr_drbg_context initializeAESKeySeed(const std::string & passphrase)
@@ -192,7 +250,8 @@ bool encryptFile(
 	{
 		outputFilePath = std::move(sourceFilePath);
 	}
-	modifyFileExtension(outputFilePath, std::string(".txt"));
+	modifyFileExtension(outputFilePath, std::string(".crypt"));
+	
 
 	return true;
 }
