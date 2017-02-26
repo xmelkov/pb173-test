@@ -27,12 +27,12 @@
 
 #include <array>
 
-#include <iostream>
-
 #include <string>
 
+#include <vector>
+
 using AESKey = std::array<unsigned char, AES_KEY_LENGTH>;
-using AESData = AESKey;
+using AESData = std::vector<unsigned char>;
 
 /**
  * Generates AES key for file encrypting
@@ -41,5 +41,6 @@ using AESData = AESKey;
  */
 AESKey generateRandomAESKey();
 
+bool encryptFile(const AESKey & key, const std::string & sourceFilePath);
 
 #endif // !ENCRYPTION_GUARD
