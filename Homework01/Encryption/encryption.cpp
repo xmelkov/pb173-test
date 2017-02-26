@@ -26,27 +26,31 @@
 * @param length Number of readed bytes. This parameter should be always lesser than
 * [block size](@ref AES_KEY_LENGTH)
 */
-static void fillAESBlock(AESData & block, const unsigned int length);
+static void fillAESBlock(AESData & block, const AESData::size_type offset);
 
 /**
  * @brief Reads whole file as byte vector.
  * @param inputFile File, where input data is readed
  * @param aesData Vector reference. This parameter is filled with values during this method
- * @return Bool value representing, whether operation was successful
+ * @return Integer value: \p (-1) in case error occured during input, non-negative integer
+ * otherwise, which represents value \p length % [\p AES_BLOCK_SIZE](@ref AES_BLOCK_SIZE)-
+ * (required for alignment)
  */
-static bool aesInput(std::ifstream & inputFile, std::vector<unsigned char> & aesData);
+static int aesInput(std::ifstream & inputFile, AESData & aesData);
 
-static void fillAESBlock(AESData & block, unsigned int length)
+static void fillAESBlock(AESData & block, const AESData::size_type offset)
 {
-	const unsigned int fillValue = AES_KEY_LENGTH - length;
-
-	for (; length < AES_BLOCK_SIZE; ++length)
+	const AESData::size_type length = block.size();
+	for (
+			AESData::size_type position = length - offset;
+			position < length; ++position
+		)
 	{
-		block[length] = fillValue;
+		block[position] = offset;
 	}
 }
 
-static bool aesInput(std::ifstream & inputFile, std::vector<unsigned char> & aesData)
+static int aesInput(std::ifstream & inputFile, AESData & aesData)
 {
 	unsigned int position = 0;
 	
@@ -60,7 +64,7 @@ static bool aesInput(std::ifstream & inputFile, std::vector<unsigned char> & aes
 		}
 	}
 
-	return !inputFile.bad();
+	return (!inputFile.bad()) ? 0 : -1;
 }
 
 
@@ -104,19 +108,26 @@ bool encryptFile(const AESKey & key, const std::string & sourceFilePath)
 	//	File input
 	std::ifstream inputFile(sourceFilePath, std::ios::in | std::ios::binary);
 	AESData data;
+	unsigned char offset = 0;
 
-	if (!(inputFile.is_open() && aesInput(inputFile,data)))
+	if (!inputFile.is_open() || (offset = static_cast<unsigned int>(aesInput(inputFile,data) < 0)))
 	{
 		std::cerr << "Unable to read \'" << sourceFilePath << "\' file" << std::endl;
 		return false;
 	}
 	inputFile.close();
 
+	if (offset)
+	{
+		fillAESBlock(data, AES_BLOCK_SIZE - offset);
+	}
+
 	//	Encryption itself
 	mbedtls_aes_context aesContext;
 	mbedtls_aes_init(&aesContext);
 
 	mbedtls_aes_setkey_enc(&aesContext, key.data(), constexpr(8 * AES_KEY_LENGTH) );
+	//mbedtls_aes_crypt_cbc(&aesContext,MBEDTLS_AES_ENCRYPT,)
 
 	mbedtls_aes_free(&aesContext);
 	return true;
