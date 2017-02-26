@@ -90,7 +90,7 @@ bool encryptFile(
 	AESData rawData = {}, encryptedData = {};
 	unsigned char offset = 0;
 
-	if (!inputFile.is_open() || (offset = static_cast<unsigned int>(aesInput(inputFile,rawData) < 0)))
+	if ((!inputFile.is_open()) || (offset = static_cast<unsigned int>(aesInput(inputFile,rawData))) < 0)
 	{
 		std::cerr << "Unable to read \'" << sourceFilePath << "\' file" << std::endl;
 		return false;
@@ -112,7 +112,7 @@ bool encryptFile(
 	mbedtls_aes_crypt_cbc(
 		&aesContext,
 		MBEDTLS_AES_ENCRYPT,
-		static_cast<size_t>(rawData.size() / AES_BLOCK_SIZE),
+		static_cast<size_t>(rawData.size()),
 		(unsigned char *) passphrase.c_str(),
 		rawData.data(),
 		encryptedData.data()
@@ -121,6 +121,10 @@ bool encryptFile(
 	mbedtls_aes_free(&aesContext);
 
 	//	File output part
+	if (outputFilePath.empty()) { outputFilePath = sourceFilePath; }
+	if (keyFilePath.empty()) { keyFilePath = sourceFilePath; }
+	if (hashFilePath.empty()) { hashFilePath = sourceFilePath; }
+
 	aesOutput(outputFilePath, OutputMode::OUTPUT_ENCRYPTED, encryptedData.data(),
 		encryptedData.data() + encryptedData.size());
 	aesOutput(keyFilePath, OutputMode::OUTPUT_KEY, key.data(),
@@ -129,7 +133,7 @@ bool encryptFile(
 	SHA512output hash = {};
 	mbedtls_sha512(encryptedData.data(), encryptedData.size(), hash.data(), 0);
 	aesOutput(hashFilePath, OutputMode::OUTPUT_SIGNATURE, hash.data(),
-		key.data() + key.size());
+		hash.data() + hash.size());
 
 	return true;
 }

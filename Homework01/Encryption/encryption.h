@@ -50,6 +50,8 @@ inline void freeAESKeySeed(mbedtls_ctr_drbg_context * seed)
  * @param keyFilePath Path to output file, where encryption key is stored
  * @param hashFilePath Path to output file, where hash of the file is stored
  * @param passphrase Sample string used to generate keys (not to initialize seed)
+ * @note If keyFilePath/hashFilePath/outputFilePath contain empty string, output 
+ * is stored into file with same path as source with different extension
  * @return Bool value, representing success of the encryption process
  */
 bool encryptFile(

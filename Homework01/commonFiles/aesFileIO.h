@@ -49,13 +49,13 @@ enum class OutputMode
 };
 
 /**
-* @brief Reads whole file as byte vector.
-* @param inputFile File, where input data is readed
-* @param aesData Vector reference. This parameter is filled with values during this method
-* @return Integer value: \p (-1) in case error occured during input, non-negative integer
-* otherwise, which represents value \p length % [\p AES_BLOCK_SIZE](@ref AES_BLOCK_SIZE)-
-* (required for alignment)
-*/
+ * @brief Reads whole file as byte vector.
+ * @param inputFile File, where input data is readed
+ * @param aesData Vector reference. This parameter is filled with values during this method
+ * @return Integer value: \p (-1) in case error occured during input, non-negative integer
+ * otherwise, which represents value \p length % [\p AES_BLOCK_SIZE](@ref AES_BLOCK_SIZE)-
+ * (required for alignment)
+ */
 int aesInput(std::ifstream & inputFile, AESData & aesData);
 
 /**

@@ -33,9 +33,9 @@ static void modifyFileExtension(std::string & filePath, const std::string & exte
 		--it;
 	}
 
-	if (it != filePath.begin())		//	If filpepath contains extension
+	if (it != filePath.begin())		//	If filepath contains extension
 	{
-		if (extension[0] == '.')
+		if (extension[0] != '.')
 		{
 			++it;
 		}
@@ -56,12 +56,12 @@ int aesInput(std::ifstream & inputFile, AESData & aesData)
 		aesData.resize(aesData.size() + AES_BLOCK_SIZE);
 		for (unsigned int i = 0; i < AES_BLOCK_SIZE && inputFile.good(); ++i)
 		{
-			inputFile >> aesData[position];
+			aesData[position] = inputFile.get();
 			++position;
 		}
 	}
 
-	return (!inputFile.bad()) ? 0 : -1;
+	return (!inputFile.bad()) ? position % AES_BLOCK_SIZE : -1;
 }
 
 
@@ -100,7 +100,10 @@ void aesOutput(
 		{
 			throw std::domain_error("Unable to perform output operation-failed to open file");
 		}
-		std::copy(first, last, std::ostream_iterator<unsigned char>(outputFile));
+		while (first != last)
+		{
+			outputFile << *first++;
+		}
 	}
 	else
 	{
@@ -111,7 +114,11 @@ void aesOutput(
 		}
 		while (first != last)
 		{
-			std::cout << std::hex << std::setfill('0') << std::setw(2) << *first++;
+			outputFile << std::hex << std::setfill('0')
+				<< std::setw(2) << ((*first) & 0xff);
+			++first;
 		}
 	}
+	outputFile << std::endl;
+	outputFile.close();
 }
