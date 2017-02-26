@@ -25,6 +25,11 @@
  */
 #define PERSONALIZATION_STRING "random string (passphrase) used for generating AES key"
 
+//	mbedTLS includes
+#include "..\libExcerpt\mbedtls\ctr_drbg.h"
+
+//	STL includes
+
 #include <array>
 
 #include <string>
@@ -35,12 +40,45 @@ using AESKey = std::array<unsigned char, AES_KEY_LENGTH>;
 using AESData = std::vector<unsigned char>;
 
 /**
- * Generates AES key for file encrypting
- * @throw std::domain_error in case if seed initialization/random number generation failed
- * @return Generated key
+ * @brief Initializes seed, used for generating AES keys
+ * @param passphrase Sample data used to create seed
+ * @return mbedtls structure-Deterministic Random Number Generator,
+ * which serves as seed to generate AES keys
+ * @throw std::domain_error in case if seed initialization failed
+ * @note After done working with mbedtls structure, resource should be freed
  */
-AESKey generateRandomAESKey();
+mbedtls_ctr_drbg_context initializeAESKeySeed(const std::string & passphrase);
 
-bool encryptFile(const AESKey & key, const std::string & sourceFilePath);
+/**
+ * @brief Generates AES key for file encrypting
+ * @param seed Seed used in rng
+ * @return Generated key
+ * @throw std::domain_error in case if random number generation failed
+ */
+AESKey generateRandomAESKey(mbedtls_ctr_drbg_context & seed);
+
+/**
+ * Resource deallocation
+ * @param seed Seed
+ */
+inline void freeAESKeySeed(mbedtls_ctr_drbg_context * seed)
+{
+	mbedtls_ctr_drbg_free(seed);
+}
+
+/**
+ * @brief main-encrypting function of the module
+ * @param key 128-bit encryption key
+ * @param sourceFilePath Path to source file (to be encrypted)
+ * @param outputFilePath Path to output file (encryption result)
+ * @param passphrase Sample string used to generate keys (not initialize )
+ * @return Bool value, representing success of the encryption process
+ */
+bool encryptFile(
+	const AESKey & key, 
+	const std::string & sourceFilePath,
+	std::string & outputFilePath,
+	const std::string & passphrase
+);
 
 #endif // !ENCRYPTION_GUARD

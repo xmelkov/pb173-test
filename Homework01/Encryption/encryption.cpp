@@ -1,5 +1,7 @@
 #include "encryption.h"
 
+//	Required for std::find
+#include <algorithm>
 
 //	Required for input flags
 #include <ios>
@@ -15,7 +17,6 @@
 
 //	Required for generating AES key
 #include "..\libExcerpt\mbedtls\entropy.h"
-#include "..\libExcerpt\mbedtls\ctr_drbg.h"
 
 //	Required for AES encryption
 #include "..\libExcerpt\mbedtls\aes.h"
@@ -37,6 +38,18 @@ static void fillAESBlock(AESData & block, const AESData::size_type offset);
  * (required for alignment)
  */
 static int aesInput(std::ifstream & inputFile, AESData & aesData);
+
+/**
+ * Removes file extension (if there is one) and appends new one
+ * @param filePath Original filepath
+ * @param extension New file extension
+ */
+static void modifyFileExtension(std::string & filePath, const std::string & extension);
+
+/**
+ * 
+ */
+static void aesOutput(std::ofstream & output, const AESData & aesEncrypted);
 
 static void fillAESBlock(AESData & block, const AESData::size_type offset)
 {
@@ -67,15 +80,35 @@ static int aesInput(std::ifstream & inputFile, AESData & aesData)
 	return (!inputFile.bad()) ? 0 : -1;
 }
 
-
-AESKey generateRandomAESKey()
+static void modifyFileExtension(std::string & filePath, const std::string & extension)
 {
-	AESKey key;
+	auto it = filePath.end();
 
+	--it;			//	Extension shouldn't be empty
+
+	while (*it != '.' && it != filePath.begin())
+	{
+		--it;
+	}
+
+	if (it != filePath.begin())		//	If filpepath contains extension
+	{
+		if (extension[0] == '.')
+		{
+			++it;
+		}
+
+		filePath.erase(it, filePath.end());
+	}
+
+	filePath += extension;
+}
+
+mbedtls_ctr_drbg_context initializeAESKeySeed(const std::string & passphrase)
+{
 	mbedtls_ctr_drbg_context ctrDbgContext;
 	mbedtls_entropy_context entropyContext;
 
-	char * passhrase = PERSONALIZATION_STRING;		//	Initialization
 	mbedtls_entropy_init(&entropyContext);
 	mbedtls_ctr_drbg_init(&ctrDbgContext);
 
@@ -84,11 +117,23 @@ AESKey generateRandomAESKey()
 				&ctrDbgContext,
 				mbedtls_entropy_func,
 				&entropyContext,
-				(unsigned char *) passhrase,
-				strlen(passhrase)
-			) ||
+				(const unsigned char *) passphrase.c_str(),
+				passphrase.size()
+			)
+		)
+	{
+		throw std::domain_error("Unable to initialize seed");
+	}
+	mbedtls_entropy_free(&entropyContext);		//	Cleanup
+	return ctrDbgContext;
+}
+
+AESKey generateRandomAESKey(mbedtls_ctr_drbg_context & seed)
+{
+	AESKey key;
+	if (
 		mbedtls_ctr_drbg_random(
-				&ctrDbgContext,
+				&seed,
 				key.data(),
 				AES_KEY_LENGTH
 			)
@@ -96,21 +141,23 @@ AESKey generateRandomAESKey()
 	{
 		throw std::domain_error("Error generating AES key");
 	}
-	mbedtls_entropy_free(&entropyContext);		//	Cleanup
-	mbedtls_ctr_drbg_free(&ctrDbgContext);
-
 	return key;									/*	Return value optimization should be applied here 
 													(supposing usage of c++11 or newer)*/
 }
 
-bool encryptFile(const AESKey & key, const std::string & sourceFilePath)
+bool encryptFile(
+	const AESKey & key, 
+	const std::string & sourceFilePath, 
+	std::string & outputFilePath,
+	const std::string & passphrase
+)
 {
 	//	File input
 	std::ifstream inputFile(sourceFilePath, std::ios::in | std::ios::binary);
-	AESData data;
+	AESData rawData, encryptedData;
 	unsigned char offset = 0;
 
-	if (!inputFile.is_open() || (offset = static_cast<unsigned int>(aesInput(inputFile,data) < 0)))
+	if (!inputFile.is_open() || (offset = static_cast<unsigned int>(aesInput(inputFile,rawData) < 0)))
 	{
 		std::cerr << "Unable to read \'" << sourceFilePath << "\' file" << std::endl;
 		return false;
@@ -119,17 +166,34 @@ bool encryptFile(const AESKey & key, const std::string & sourceFilePath)
 
 	if (offset)
 	{
-		fillAESBlock(data, AES_BLOCK_SIZE - offset);
+		fillAESBlock(rawData, AES_BLOCK_SIZE - offset);
 	}
 
-	//	Encryption itself
-	mbedtls_aes_context aesContext;
+	//	Encryption part
+	encryptedData.resize(rawData.size());			//	Allocates sufficient space for output
+
+	mbedtls_aes_context aesContext;					
 	mbedtls_aes_init(&aesContext);
 
 	mbedtls_aes_setkey_enc(&aesContext, key.data(), constexpr(8 * AES_KEY_LENGTH) );
-	//mbedtls_aes_crypt_cbc(&aesContext,MBEDTLS_AES_ENCRYPT,)
+	mbedtls_aes_crypt_cbc(
+		&aesContext,
+		MBEDTLS_AES_ENCRYPT,
+		static_cast<size_t>(rawData.size() / AES_BLOCK_SIZE),
+		0,
+		rawData.data(),
+		encryptedData.data()
+	);
 
 	mbedtls_aes_free(&aesContext);
+
+	//	File output part
+	if (outputFilePath.empty())
+	{
+		outputFilePath = std::move(sourceFilePath);
+	}
+	modifyFileExtension(outputFilePath, std::string(".txt"));
+
 	return true;
 }
 
