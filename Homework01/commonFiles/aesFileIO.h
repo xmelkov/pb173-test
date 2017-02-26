@@ -79,6 +79,12 @@ void aesOutput(
  * @param sKey String, consisting of characters 0-9,a-f
  * @return Constructed key
  */
-AESKey keyFromString(std::string & sKey);
+AESKey keyFromString(std::string & sHash);
 
+/**
+ * @brief Creates SHA512output (array) from sequence of hexadecimal characters
+ * @param String, consisting of characters 0-9,a-f
+ * @return Constructed hash
+ */
+SHA512output hashFromString(std::string & sHash);
 #endif // !AES_FILE_IO_GUARD

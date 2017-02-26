@@ -48,6 +48,28 @@ static void modifyFileExtension(std::string & filePath, const std::string & exte
 	filePath += extension;
 }
 
+/**
+ * @brief This function is used for hash/key input during verification/decryption process
+ * @param input Input string
+ * @param output Pointer to output data
+ * @param count Expected output size
+ */
+void readHex(const std::string & input, unsigned char * output, const size_t count)
+{
+	AESKey::size_type outputIndex = count - 1;
+	bool flag = true;
+	const std::string::size_type size = input.size();
+	for (std::string::size_type i = size - 1;
+		i < size * 2 && isxdigit(input[i]) &&
+		outputIndex < AES_KEY_LENGTH; --i)
+	{
+		unsigned char value = input[i];
+		value -= isalpha(input[i]) ? ((isupper(input[i]) ? 'A' : 'a')) - 10 : '0';
+		output[outputIndex] |= ((flag) ? 1 : 16) * value;
+		if (!flag) { --outputIndex; }
+		flag = !(flag);
+	}
+}
 
 int aesInput(std::ifstream & inputFile, AESData & aesData)
 {
@@ -132,17 +154,17 @@ AESKey keyFromString(std::string & sKey)
 		sKey.resize(constexpr(AES_KEY_LENGTH * 2));
 	}
 	AESKey newKey = {};
-	AESKey::size_type keyIndex = constexpr(AES_KEY_LENGTH - 1);
-	bool flag = true;
-	for (std::string::size_type i = sKey.size() - 1; 
-		i < constexpr(AES_KEY_LENGTH * 2) && isxdigit(sKey[i]) && 
-		keyIndex < AES_KEY_LENGTH ; --i)
-	{
-		unsigned char value = sKey[i];
-		value -= isalpha(sKey[i]) ? ((isupper(sKey[i]) ? 'A' : 'a')) - 10 : '0';
-		newKey[keyIndex] |= ((flag) ? 1 : 16) * value;
-		if (!flag) { --keyIndex; }
-		flag = !(flag);
-	}
+	readHex(sKey, newKey.data(), AES_KEY_LENGTH);
 	return newKey;
+}
+
+SHA512output hashFromString(std::string & sHash)
+{
+	if (sHash.size() > constexpr(SHA512_OUTPUT_SIZE * 2))
+	{
+		sHash.resize(constexpr(SHA512_OUTPUT_SIZE * 2));
+	}
+	SHA512output newHash = {};
+	readHex(sHash, newHash.data(), SHA512_OUTPUT_SIZE);
+	return newHash;
 }
