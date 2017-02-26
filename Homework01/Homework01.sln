@@ -9,10 +9,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Encryption", "Encryption\En
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Decryption", "Decryption\Decryption.vcxproj", "{E46B98A2-B2A6-415C-B952-0C0B19A75C97}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "commonFiles", "commonFiles\commonFiles.vcxitems", "{FE39AA3E-3F3D-4D13-9725-F7F60C0BE456}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		libExcerpt\libExcerpt.vcxitems*{e8092c22-a162-42bf-aa21-90a8e2ebb6c0}*SharedItemsImports = 4
+		commonFiles\commonFiles.vcxitems*{e8092c22-a162-42bf-aa21-90a8e2ebb6c0}*SharedItemsImports = 4
+		commonFiles\commonFiles.vcxitems*{fe39aa3e-3f3d-4d13-9725-f7f60c0be456}*SharedItemsImports = 9
 		libExcerpt\libExcerpt.vcxitems*{e46b98a2-b2a6-415c-b952-0c0b19a75c97}*SharedItemsImports = 4
+		commonFiles\commonFiles.vcxitems*{e46b98a2-b2a6-415c-b952-0c0b19a75c97}*SharedItemsImports = 4
 		libExcerpt\libExcerpt.vcxitems*{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
