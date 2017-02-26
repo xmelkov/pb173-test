@@ -16,6 +16,8 @@
 //	Required for exception handling
 #include <stdexcept>
 
+//	Required for char functions
+#include <cctype>
 
 /**
  * Removes file extension (if there is one) and appends new one
@@ -121,4 +123,26 @@ void aesOutput(
 	}
 	outputFile << std::endl;
 	outputFile.close();
+}
+
+AESKey keyFromString(std::string & sKey)
+{
+	if (sKey.size() > constexpr(AES_KEY_LENGTH * 2))
+	{
+		sKey.resize(constexpr(AES_KEY_LENGTH * 2));
+	}
+	AESKey newKey = {};
+	AESKey::size_type keyIndex = constexpr(AES_KEY_LENGTH - 1);
+	bool flag = true;
+	for (std::string::size_type i = sKey.size() - 1; 
+		i < constexpr(AES_KEY_LENGTH * 2) && isxdigit(sKey[i]) && 
+		keyIndex < AES_KEY_LENGTH ; --i)
+	{
+		unsigned char value = sKey[i];
+		value -= isalpha(sKey[i]) ? ((isupper(sKey[i]) ? 'A' : 'a')) - 10 : '0';
+		newKey[keyIndex] |= ((flag) ? 1 : 16) * value;
+		if (!flag) { --keyIndex; }
+		flag = !(flag);
+	}
+	return newKey;
 }

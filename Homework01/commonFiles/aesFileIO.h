@@ -74,4 +74,11 @@ void aesOutput(
 	const unsigned char * last
 );
 
+/**
+ * @brief Creates AESKey(array) from sequence of hexadecimal characters
+ * @param sKey String, consisting of characters 0-9,a-f
+ * @return Constructed key
+ */
+AESKey keyFromString(std::string & sKey);
+
 #endif // !AES_FILE_IO_GUARD
