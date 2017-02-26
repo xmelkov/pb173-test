@@ -61,7 +61,7 @@ mbedtls_ctr_drbg_context initializeAESKeySeed(const std::string & passphrase)
 
 AESKey generateRandomAESKey(mbedtls_ctr_drbg_context & seed)
 {
-	AESKey key;
+	AESKey key = {};
 	if (
 		mbedtls_ctr_drbg_random(
 				&seed,
@@ -87,7 +87,7 @@ bool encryptFile(
 {
 	//	File input
 	std::ifstream inputFile(sourceFilePath, std::ios::in | std::ios::binary);
-	AESData rawData, encryptedData;
+	AESData rawData = {}, encryptedData = {};
 	unsigned char offset = 0;
 
 	if (!inputFile.is_open() || (offset = static_cast<unsigned int>(aesInput(inputFile,rawData) < 0)))
@@ -113,7 +113,7 @@ bool encryptFile(
 		&aesContext,
 		MBEDTLS_AES_ENCRYPT,
 		static_cast<size_t>(rawData.size() / AES_BLOCK_SIZE),
-		0,
+		(unsigned char *) passphrase.c_str(),
 		rawData.data(),
 		encryptedData.data()
 	);
@@ -123,10 +123,13 @@ bool encryptFile(
 	//	File output part
 	aesOutput(outputFilePath, OutputMode::OUTPUT_ENCRYPTED, encryptedData.data(),
 		encryptedData.data() + encryptedData.size());
-	aesOutput(outputFilePath, OutputMode::OUTPUT_KEY, key.data(),
+	aesOutput(keyFilePath, OutputMode::OUTPUT_KEY, key.data(),
 		key.data() + key.size());
-	/*aesOutput(outputFilePath, OutputMode::OUTPUT_SIGNATURE, key.data(),
-		key.data() + key.size());*/
+	
+	SHA512output hash = {};
+	mbedtls_sha512(encryptedData.data(), encryptedData.size(), hash.data(), 0);
+	aesOutput(hashFilePath, OutputMode::OUTPUT_SIGNATURE, hash.data(),
+		key.data() + key.size());
 
 	return true;
 }

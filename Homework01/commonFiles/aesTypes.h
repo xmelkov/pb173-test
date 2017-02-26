@@ -21,6 +21,12 @@
 #define AES_BLOCK_SIZE 16
 
 /**
+ * @def SHA512_BLOCK_SIZE
+ * Specifies size (in bytes) of output of SHA512 hash function
+ */
+#define SHA512_OUTPUT_SIZE 64
+
+/**
  * @def PERSONALIZATION_STRING
  * A phrase required to generate aes keys.
  */
@@ -34,6 +40,6 @@
 
 using AESKey = std::array<unsigned char, AES_KEY_LENGTH>;
 using AESData = std::vector<unsigned char>;
-
+using SHA512output = std::array<unsigned char, SHA512_OUTPUT_SIZE>;
 
 #endif // !AES_TYPES_GUARD
