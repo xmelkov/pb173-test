@@ -5,6 +5,14 @@
 #include "..\libExcerpt\mbedtls\entropy.h"
 #include "..\libExcerpt\mbedtls\ctr_drbg.h"
 
+/**
+* @brief Fills single block with value representing, how many padded bytes are needed (PKCS#7 padding)
+* @param block Block of input data, to be updated
+* @param length Number of readed bytes. This parameter should be always lesser than
+* [block size](@ref AES_KEY_LENGTH)
+*/
+static void fillAESBlock(AESData & block, const unsigned int length);
+
 AESKey generateRandomAESKey()
 {
 	AESKey key;
@@ -38,4 +46,14 @@ AESKey generateRandomAESKey()
 
 	return key;									/*	Return value optimization should be applied here 
 													(supposing usage of c++11 or newer)*/
+}
+
+static void fillAESBlock(AESData & block, unsigned int length)
+{
+	const unsigned int fillValue = AES_KEY_LENGTH - length;
+	
+	for (; length < AES_BLOCK_SIZE; ++length)
+	{
+		block[length] = fillValue;
+	}
 }
